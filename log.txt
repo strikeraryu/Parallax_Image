@@ -1,0 +1,4 @@
+libraries used
+    . opencv-python==4.1.0.25  
+    . pil
+    . pygame
