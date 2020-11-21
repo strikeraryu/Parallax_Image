@@ -12,7 +12,7 @@ from detection import *
 base_dir = os.path.dirname(__file__) + '/..'
 
 
-def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30):
+def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30, show_dmap=False):
     if img_path == None:
         tkinter.Tk().withdraw()
         img_path = filedialog.askopenfilename(initialdir = base_dir + '/test')
@@ -36,6 +36,10 @@ def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30):
         print('No image')
     img_depth_map = get_depth(img)
     print('\ndepth map genrated...')
+
+    if show_dmap:
+        cv2.imshow('Depth map', img_depth_map)
+        cv2.waitKey(0)
 
     print('\nCreating layers...')
     layers = get_layers(img, img_depth_map, div=layer_div)
