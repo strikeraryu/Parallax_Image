@@ -20,7 +20,11 @@ def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30, sh
     img = cv2.imread(img_path)
 
     if height==-1 or width==-1:
-        img_ratio  = img.shape[0]/img.shape[1]
+        try:
+            img_ratio  = img.shape[0]/img.shape[1]
+        except Exception as e:
+            print('No image')
+            return []
         if height==-1 and width==-1:
             width, height = int(800/img_ratio), 800
         elif height==-1:
@@ -30,10 +34,7 @@ def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30, sh
 
 
     print('\nCreating depth map...')
-    try:
-        img = cv2.resize(img, (width, height))
-    except Exception as e:
-        print('No image')
+    img = cv2.resize(img, (width, height))
     img_depth_map = get_depth(img)
     print('\ndepth map genrated...')
 
@@ -52,7 +53,7 @@ def create_parallax_image(img_path=None, height=-1, width=-1, layer_div = 30, sh
     return new_layers
 
 
-def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_transform = False, sens = 50):
+def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_transform = False, sens = 50, show_cam = False):
 
     if len(layers) == 0:
         print('No layers to show')
@@ -60,6 +61,7 @@ def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_t
 
     width, height = layers[0].get_width(), layers[0].get_height()    
     win = pg.display.set_mode((int((width - off_set)*scale), int((height - off_set)*scale)))
+    pg.display.set_caption('Parallax_image')
 
     scaled_layers = []
     for layer in layers:
@@ -69,7 +71,7 @@ def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_t
     shift_y = 0
     run = True
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 
     while run:
@@ -86,11 +88,13 @@ def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_t
 
         if len(face_rect) != 0:
             x,y,w,h, = face_rect
+            face_rect_frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (255,255,0), 3)
             shift_x = (initial_pos[0] - (x + w/2))/(sens*scale)
             shift_y = (initial_pos[1] - (y + h/2))/(sens*scale)
 
 
         win.fill((255, 255, 255))
+
         
         for i, layer in enumerate(scaled_layers):
             new_x = -off_set/2
@@ -100,6 +104,11 @@ def show_parallax_image(layers, scale = 1, off_set = 20, x_transform = True, y_t
             if y_transform:
                 new_y = 0 + shift_y*i
             win.blit(layer, (new_x, new_y))
+
+        face_rect_frame = cv2.resize(face_rect_frame, (100, 100))
+        if show_cam:
+            win.blit(conv_cv_pygame(face_rect_frame), (0, 0))
+        
         pg.display.update()
 
     cap.release()
