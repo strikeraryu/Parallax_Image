@@ -1,3 +1,5 @@
+![Demo](https://github.com/strikeraryu/Parallax_Image/blob/master/demo/demo5.gif)
+
 # Parallax_Image
 A tool made in python to convert normal image into special images which change their perspective as the user moves using face detection.
 
@@ -20,6 +22,9 @@ Download the model weights [model-f6b98070.pt](https://github.com/intel-isl/MiDa
 * Install all the required libraries and prerequisite (You can create your virtual own virtual env and install libraries in that)
 * Run the Revamp/main.py 
 * You can either give path of the image in the main.py or or select the file in the browser that will appear if no path is given
+
+## Demo
+![Demo](https://github.com/strikeraryu/Parallax_Image/blob/master/demo/demo3.gif)
 
 
 ### More Links
