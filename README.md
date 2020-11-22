@@ -2,6 +2,7 @@
 
 # Parallax_Image
 A tool made in python to convert normal image into special images which change their perspective as the user moves using face detection.
+You can check more about Parallax image and how it works on <b>[Medium](https://striker-aryu56.medium.com/parallax-images-14e92ebb1bae) </b>
 
 
 ## Required libraries
